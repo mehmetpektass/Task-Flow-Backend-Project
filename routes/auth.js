@@ -65,7 +65,7 @@ router.get('/google', passport.authenticate('google', {
 
 // Google OAuth callback
 router.get('/google/callback',
-  passport.authenticate('google', { session: false, failureRedirect: 'http://localhost:3000/login?error=google' }),
+  passport.authenticate('google', { session: false, failureRedirect: `${process.env.FRONTEND_URL}/login?error=google` }),
   (req, res) => {
     const token = jwt.sign({ id: req.user._id }, process.env.JWT_SECRET, { expiresIn: '7d' });
     const user = encodeURIComponent(JSON.stringify({
@@ -73,7 +73,7 @@ router.get('/google/callback',
       name: req.user.name,
       email: req.user.email,
     }));
-    res.redirect(`http://localhost:3000/auth/callback?token=${token}&user=${user}`);
+    res.redirect(`${process.env.FRONTEND_URL}/auth/callback?token=${token}&user=${user}`);
   }
 );
 
